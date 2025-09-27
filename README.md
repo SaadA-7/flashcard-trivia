@@ -41,8 +41,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented required features:
 
-<img src='/flashcard-trivia\public\p2gif.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-<img src='https://github.com/SaadA-7/community-board/blob/main/src/assets/walkthrough.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/SaadA-7/flashcard-trivia/blob/main/public/p2gif.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
 ## Notes
