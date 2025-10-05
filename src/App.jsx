@@ -24,42 +24,68 @@ const App = () => {
   // State variables
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [cardHistory, setCardHistory] = useState([0]); // Track card history
-  const [historyIndex, setHistoryIndex] = useState(0); // Current position in history
+  const [cards, setCards] = useState(cardData); // Mutable list for shuffle
+  const [userGuess, setUserGuess] = useState('');
+  const [guessResult, setGuessResult] = useState(''); // 'correct', 'incorrect', or ''
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [longestStreak, setLongestStreak] = useState(0);
 
   // Function to flip the card
   const flipCard = () => {
     setIsFlipped(!isFlipped);
   };
 
-  // Function to get next random card
+  // Function to handle guess submission
+  const handleSubmitGuess = () => {
+    const currentCard = cards[currentCardIndex];
+    const correctAnswer = currentCard.answer.toLowerCase().trim();
+    const userAnswer = userGuess.toLowerCase().trim();
+    
+    // Check if answer is correct (case-insensitive)
+    if (userAnswer === correctAnswer) {
+      setGuessResult('correct');
+      const newStreak = currentStreak + 1;
+      setCurrentStreak(newStreak);
+      if (newStreak > longestStreak) {
+        setLongestStreak(newStreak);
+      }
+    } else {
+      setGuessResult('incorrect');
+      setCurrentStreak(0);
+    }
+  };
+
+  // Function to go to next card
   const getNextCard = () => {
-    let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * cardData.length);
-    } while (newIndex === currentCardIndex && cardData.length > 1);
-    
-    setCurrentCardIndex(newIndex);
-    setIsFlipped(false); // Reset to show question side
-    
-    // Update history
-    const newHistory = cardHistory.slice(0, historyIndex + 1);
-    newHistory.push(newIndex);
-    setCardHistory(newHistory);
-    setHistoryIndex(newHistory.length - 1);
+    if (currentCardIndex < cards.length - 1) {
+      setCurrentCardIndex(currentCardIndex + 1);
+      setIsFlipped(false);
+      setUserGuess('');
+      setGuessResult('');
+    }
   };
 
   // Function to go to previous card
   const getPreviousCard = () => {
-    if (historyIndex > 0) {
-      const prevIndex = historyIndex - 1;
-      setHistoryIndex(prevIndex);
-      setCurrentCardIndex(cardHistory[prevIndex]);
+    if (currentCardIndex > 0) {
+      setCurrentCardIndex(currentCardIndex - 1);
       setIsFlipped(false);
+      setUserGuess('');
+      setGuessResult('');
     }
   };
 
-  const currentCard = cardData[currentCardIndex];
+  // Function to shuffle cards
+  const shuffleCards = () => {
+    const shuffled = [...cards].sort(() => Math.random() - 0.5);
+    setCards(shuffled);
+    setCurrentCardIndex(0);
+    setIsFlipped(false);
+    setUserGuess('');
+    setGuessResult('');
+  };
+
+  const currentCard = cards[currentCardIndex];
 
   return (
     <div className="App">
@@ -68,7 +94,10 @@ const App = () => {
       <div className="header">
         <h1>Soccer Trivia</h1>
         <h2>Test your ball knowledge</h2>
-        <p>Number of cards: {cardData.length}</p>
+        <p>Number of cards: {cards.length}</p>
+        <p className="streak-info">
+          Current Streak: {currentStreak} | Longest Streak: {longestStreak}
+        </p>
       </div>
 
       <div className="card-container">
@@ -93,15 +122,45 @@ const App = () => {
         </div>
       </div>
 
+      <div className="guess-section">
+        <label htmlFor="guess-input">Guess the answer:</label>
+        <input
+          id="guess-input"
+          type="text"
+          value={userGuess}
+          onChange={(e) => setUserGuess(e.target.value)}
+          placeholder="Type your answer here..."
+          className={`guess-input ${guessResult}`}
+        />
+        <button onClick={handleSubmitGuess} className="submit-button">
+          Submit Guess
+        </button>
+        {guessResult && (
+          <p className={`result-message ${guessResult}`}>
+            {guessResult === 'correct' ? '✓ Correct!' : '✗ Incorrect, try again!'}
+          </p>
+        )}
+      </div>
+
       <div className="button-container">
         <button 
           className="nav-button prev-button" 
           onClick={getPreviousCard}
-          disabled={historyIndex === 0}
+          disabled={currentCardIndex === 0}
         >
           ← Previous Card
         </button>
-        <button className="nav-button next-button" onClick={getNextCard}>
+        <button 
+          className="nav-button shuffle-button" 
+          onClick={shuffleCards}
+        >
+          🔀 Shuffle
+        </button>
+        <button 
+          className="nav-button next-button" 
+          onClick={getNextCard}
+          disabled={currentCardIndex === cards.length - 1}
+        >
           Next Card →
         </button>
       </div>
