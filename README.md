@@ -45,14 +45,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
-<!-- Replace this with whatever GIF tool you used! -->
-GIF created with ...  
-<!-- Recommended tools:
-[Kap](https://getkap.co/) for macOS
-[ScreenToGif](https://www.screentogif.com/) for Windows
-[peek](https://github.com/phw/peek) for Linux. -->
+<img src='https://github.com/SaadA-7/flashcard-trivia/blob/main/public/p3gif.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 ## Notes
 This was a continuation of a project 2 who's readme is below this one.
